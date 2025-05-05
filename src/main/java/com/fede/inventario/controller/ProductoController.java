@@ -37,4 +37,16 @@ public class ProductoController {
     public void deleteProducto(@PathVariable Long id) {
         productoRepository.deleteById(id);
     }
+
+    // Endpoint PUT para actualizar un producto existente
+@PutMapping("/{id}")
+public Producto updateProducto(@PathVariable Long id, @RequestBody Producto productoDetails) {
+    return productoRepository.findById(id).map(producto -> {
+        producto.setNombre(productoDetails.getNombre());
+        producto.setPrecio(productoDetails.getPrecio());
+       
+        
+        return productoRepository.save(producto);
+    }).orElse(null);
+}
 }

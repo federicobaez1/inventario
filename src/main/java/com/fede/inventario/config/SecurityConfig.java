@@ -9,16 +9,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .cors().and()
             .csrf().disable()
             .authorizeHttpRequests()
-                .requestMatchers("/productos/**").permitAll() // 👈 Permitir todo acceso a /productos
+                .requestMatchers("/productos/**").permitAll()
                 .anyRequest().authenticated()
             .and()
-            .httpBasic(); // 👈 Habilitar autenticación básica
-
-        return http.build();
+            .build();
     }
 }
-

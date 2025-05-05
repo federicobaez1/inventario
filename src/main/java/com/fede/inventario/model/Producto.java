@@ -2,12 +2,15 @@
 package com.fede.inventario.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity  // Indica que esta clase es una entidad JPA
 public class Producto {
 
     @Id  // Marca este campo como la clave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
     private String nombre;
     private Double precio;
