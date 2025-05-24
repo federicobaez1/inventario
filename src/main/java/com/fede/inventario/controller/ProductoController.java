@@ -1,8 +1,10 @@
 package com.fede.inventario.controller;
 
 import com.fede.inventario.model.Producto;
-import com.fede.inventario.repository.ProductoRepository;
+import com.fede.inventario.service.ProductoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,41 +14,52 @@ import java.util.List;
 public class ProductoController {
 
     @Autowired
-    private ProductoRepository productoRepository;
+    private ProductoService productoService;
 
     // Endpoint GET para obtener todos los productos
     @GetMapping
     public List<Producto> getAllProductos() {
-        return productoRepository.findAll();
+        return productoService.obtenerTodos();
     }
 
     // Endpoint POST para crear un nuevo producto
     @PostMapping
     public Producto createProducto(@RequestBody Producto producto) {
-        return productoRepository.save(producto);
+        return productoService.guardar(producto);
     }
 
-    // Endpoint GET para obtener un producto por su ID
+    
+    // Obtener un producto por ID
     @GetMapping("/{id}")
-    public Producto getProductoById(@PathVariable Long id) {
-        return productoRepository.findById(id).orElse(null);
+    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
+        return productoService.obtenerPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Endpoint DELETE para eliminar un producto por su ID
+    
+    // Eliminar un producto por ID
     @DeleteMapping("/{id}")
-    public void deleteProducto(@PathVariable Long id) {
-        productoRepository.deleteById(id);
+    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
+        if (!productoService.existePorId(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        productoService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 
-    // Endpoint PUT para actualizar un producto existente
-@PutMapping("/{id}")
-public Producto updateProducto(@PathVariable Long id, @RequestBody Producto productoDetails) {
-    return productoRepository.findById(id).map(producto -> {
-        producto.setNombre(productoDetails.getNombre());
-        producto.setPrecio(productoDetails.getPrecio());
-       
-        
-        return productoRepository.save(producto);
-    }).orElse(null);
-}
+    
+
+// Actualizar un producto existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> updateProducto(@PathVariable Long id, @RequestBody Producto productoDetails) {
+        return productoService.obtenerPorId(id).map(producto -> {
+            producto.setNombre(productoDetails.getNombre());
+            producto.setPrecio(productoDetails.getPrecio());
+            
+
+            Producto actualizado = productoService.guardar(producto);
+            return ResponseEntity.ok(actualizado);
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }
