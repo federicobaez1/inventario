@@ -130,5 +130,16 @@ public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
     return ResponseEntity.ok("Usuario creado");
 }
 
+@DeleteMapping("/users/{username}")
+public ResponseEntity<?> eliminarUsuario(@PathVariable String username) {
+    var usuarioOpt = usuarioRepository.findByUsername(username);
+    if (usuarioOpt.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+    }
+    usuarioRepository.delete(usuarioOpt.get());
+    return ResponseEntity.ok("Usuario eliminado");
+}
+
+
 
 }
