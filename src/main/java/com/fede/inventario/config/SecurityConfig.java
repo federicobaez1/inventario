@@ -31,9 +31,12 @@ public class SecurityConfig {
             .cors(withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/register", "/auth/login", "/auth/users/**").permitAll()
-                .anyRequest().authenticated()
-            )
+    .requestMatchers("/auth/register", "/auth/login").permitAll()
+    .requestMatchers("/users/**").hasRole("ADMIN")
+    .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+    .anyRequest().authenticated()
+)
+
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore((Filter) jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
