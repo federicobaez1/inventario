@@ -13,6 +13,8 @@ public class Usuario {
     private String username;
 
     private String password;
+    @ManyToOne
+    private Empleado empleado;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -53,6 +55,16 @@ public class Usuario {
     public void setRoles(Set<Rol> roles) {
         this.roles = roles;
     }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    
 
     
 }
