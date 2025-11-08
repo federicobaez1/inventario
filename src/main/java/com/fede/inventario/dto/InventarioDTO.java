@@ -1,14 +1,16 @@
 package com.fede.inventario.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fede.inventario.model.Inventario;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record InventarioDTO(
         Long id,
         String codigo,
         Integer estado,
-        Date fecha,
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        LocalDate fecha,
         String observaciones
 ) {
     // Método auxiliar para convertir de entidad a DTO

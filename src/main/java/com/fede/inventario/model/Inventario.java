@@ -1,6 +1,7 @@
 package com.fede.inventario.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,8 @@ public class Inventario {
     @Id  
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
-    private Date fecha;
+    @JsonFormat(pattern = "yyyy-MM-dd") 
+    private LocalDate fecha;
     @ManyToOne
     private Usuario usuario;
     private Integer estado;
@@ -28,12 +30,7 @@ public class Inventario {
     public void setId(Long id) {
         this.id = id;
     }
-    public Date getFecha() {
-        return fecha;
-    }
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
+    
     
     public Usuario getUsuario() {
         return usuario;
@@ -58,6 +55,12 @@ public class Inventario {
     }
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
     
