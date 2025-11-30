@@ -33,4 +33,15 @@ public class RolController {
         Rol nuevoRol = rolRepository.save(rol);
         return ResponseEntity.ok(new RolDTO(nuevoRol.getId(), nuevoRol.getNombre()));
     }
+
+    @DeleteMapping("/{id}")
+public ResponseEntity<?> eliminarRol(@PathVariable Long id) {
+    return rolRepository.findById(id)
+            .map(rol -> {
+                rolRepository.delete(rol);
+                return ResponseEntity.ok().build();
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
+
 }
